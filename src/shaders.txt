@@ -1,0 +1,3 @@
+tree_prog:vertex.glsl,tree_frag.glsl
+apple_prog:vertex.glsl,fragment.glsl
+platform_prog:vertex.glsl,fragment.glsl

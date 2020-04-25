@@ -1,0 +1,26 @@
+# Blender MTL File: 'None'
+# Material Count: 2
+
+newmtl Zelt_Baumstamm_Boden
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Bump -bm 0.300000 D:\\Documents\\csc 476\\FunGame\\resources\\tree\\source\\Texturen\\Zelt_Baumstamm_Boden_bump.png
+map_Kd D:\\Documents\\csc 476\\FunGame\\resources\\tree\\source\\Texturen\\Zelt_Baumstamm_Boden_diffuse.png
+
+newmtl leaf_tree
+Ns 18.000005
+Ka 1.000000 1.000000 1.000000
+Kd 0.588000 0.588000 0.588000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd D:\\Documents\\csc 476\\FunGame\\resources\\tree\\source\\Concept Art\\Leaf-texture_diffuse.png
+map_d D:\\Documents\\csc 476\\FunGame\\resources\\tree\\source\\Concept Art\\Leaf-texture_alpha.png

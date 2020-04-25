@@ -1,0 +1,10 @@
+#pragma once
+#ifndef SYSTEM_ENVIRONMENT_H
+#define SYSTEM_ENVIRONMENT_H
+
+#include <string>
+
+const std::string resourceDir = "../resources/";
+const std::string srcDir = "../src/";
+
+#endif //SYSTEM_ENVIRONMENT_H
