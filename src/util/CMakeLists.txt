@@ -1,0 +1,5 @@
+set(TARGET_NAME utilityTarget)
+file(GLOB SOURCES *.cpp *.c)
+file(GLOB HEADERS *.hpp *.h)
+add_library(${TARGET_NAME} ${SOURCES} ${HEADERS})
+BuildProperties(${TARGET_NAME})

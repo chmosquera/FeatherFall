@@ -32,7 +32,7 @@
 
 # Mac Xcode
 build/
-CMakeLists.txt
+#CMakeLists.txt
 .DS_Store
 ext/
 SystemEnvironment.h
