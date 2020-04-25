@@ -34,5 +34,5 @@
 build/
 #CMakeLists.txt
 .DS_Store
-ext/
+#ext/
 SystemEnvironment.h
