@@ -1,3 +1,10 @@
+//
+//  TreeEntity.h
+//  lab1
+//
+//  Created by Chanelle Mosquera on 4/26/20.
+//
+
 #pragma once
 
 #ifndef INPUT_SYSTEM_H
@@ -45,6 +52,7 @@ public:
 
 	static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static void cursorPositionCallBack(GLFWwindow* window, double xpos, double ypos);
+	static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 
 
 private:
@@ -66,6 +74,8 @@ private:
 	input_t RIGHT_ARROW_RELEASE = { GLFW_KEY_RIGHT, GLFW_RELEASE };
 	input_t DOWN_ARROW_RELEASE = { GLFW_KEY_DOWN, GLFW_RELEASE };
 	input_t LEFT_ARROW_RELEASE = { GLFW_KEY_LEFT, GLFW_RELEASE };
+
+	input_t MOUSE_BTN_DOWN = { GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS };
 
 	static void default_action() {
 		std::cout << "This is a blank action--------------" << std::endl;

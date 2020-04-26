@@ -29,9 +29,16 @@ glm::mat4 CameraEntity::getView() const
 
 	glm::quat reverseOrient = glm::conjugate(orientation);
 	glm::mat4 rot = glm::mat4_cast(reverseOrient);
-	glm::mat4 translation = glm::translate(glm::mat4(1.0), -movement->getPosition());
+	//glm::mat4 translation = glm::translate(glm::mat4(1.0), position);
 
-	return rot * translation;
+	//return translation;
+	glm::vec3 dir = target_pos - position;
+	glm::vec3 right = glm::cross(glm::vec3(0, 1, 0), dir);
+	glm::vec3 up = glm::cross(dir, right);
+
+	glm::mat4 lookAt = glm::lookAt(position, target_pos, up);
+
+	return lookAt * rot;
 
 }
 glm::vec3 CameraEntity::getViewDir() const
@@ -50,31 +57,17 @@ void CameraEntity::setViewMatrix(Program * prog) {
 	prog->unbind();
 }
 
-static glm::vec3 speed = glm::vec3(0);
-static float step = 0.1f;
-void CameraEntity::smoothTranslate(glm::vec3 maxSpeed) {
-	if (speed.x < maxSpeed.x) speed.x += step;
-	if (speed.y < maxSpeed.y) speed.y += step;
-	if (speed.z < maxSpeed.z) speed.z += step;
+glm::vec3 CameraEntity::setTargetObject(Entity * entity) {
+	if (entity != nullptr) target_pos = entity->position;
 
-	if (speed.x > maxSpeed.x) speed.x -= step;
-	if (speed.y > maxSpeed.y) speed.y -= step;
-	if (speed.z > maxSpeed.z) speed.z -= step;
-
-	//getComponent<MovementComponent>().incrementVelocity(speed);
+	return target_pos;
 }
-
 
 //static float w = 0;
 void CameraEntity::update(double frametime){
     getComponent<BoundingBoxComponent>().calculateBoxCoordinates(movement->getPosition());
 	movement->update(frametime);
-
-	//x += 0.1f;	
-	//movement->setVelocity(glm::vec3(0,0,x));
-	glm::vec3 vel = movement->getVelocity();
-	M = M * glm::translate(glm::mat4(1), movement->getVelocity()); // *glm::rotate(glm::mat4(1), w, glm::vec3(1, 0, 0));
-
+	position = movement->getPosition();
 }
 
 glm::mat4 CameraEntity::getViewMatrix()
@@ -87,22 +80,27 @@ glm::mat4 CameraEntity::getViewMatrix()
 	glm::mat4 rot = glm::mat4_cast(reverseOrient);
 	glm::mat4 translation = glm::translate(glm::mat4(1.0), -movement->getPosition());
 
-	return rot * translation;
+	//return rot * translation;
+	return translation;
 }
 
 void CameraEntity::ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch)
 {
+	if (lock_orientation) return;
 
 	CursorPos newpos = { xoffset, yoffset };
 	float dX = (xoffset - old_cursor_pos.x) * mouse_sensativity;
-	float dY = (yoffset - old_cursor_pos.y) * mouse_sensativity * 0.1;
+	float dY = (yoffset - old_cursor_pos.y) * mouse_sensativity;
 
 	pitch += dX;
 	yaw -= dY; // inverse
 
+	old_cursor_pos.x = xoffset;
+	old_cursor_pos.y = yoffset;
+
 	// continue changing look direction if mouse is along edge of acreen
-	if (xoffset > (screensize.x / 4) && xoffset < (screensize.x / 4 * 3)) old_cursor_pos.x = xoffset;
-	if (yoffset > (screensize.y / 4) && xoffset < (screensize.y / 4 * 3)) old_cursor_pos.y = yoffset;
+	//if (xoffset > (screen_size.x / 4) && xoffset < (screen_size.x / 4 * 3)) old_cursor_pos.x = xoffset;
+	//if (yoffset > (screen_size.y / 4) && xoffset < (screen_size.y / 4 * 3)) old_cursor_pos.y = yoffset;
 
 	//old_cursor_pos = glm::vec2(xoffset, yoffset);
 	//float pitch_change = xoffset * mouse_sensativity;
