@@ -30,27 +30,17 @@ public:
 		this->texture = new SimpleTexture2D(tex_file_path);
 		this->texture->initParams();
 
-		drawable = addComponent<DrawableComponent>();
-		movement = addComponent<MovementComponent>();
+		addComponent<DrawableComponent>();
+		addComponent<MovementComponent>();
 	}
-
-	// Components
-	DrawableComponent * drawable;
-	MovementComponent * movement;
 		
 	void draw(Program* prog);
 
 	std::shared_ptr<Shape> shape;
 
 	SimpleTexture2D * texture;
-
-    glm::vec3 getScale() { return(scale); }
-	void setScale(glm::vec3 s) { scale = s; }
 private:
 	std::string obj_file_path;
 	std::string tex_file_path;
-
-	glm::vec3 position = glm::vec3(1.0f, 1.0f, 1.0f);
-	glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 };
 #endif /* PlatformEntity_h */

@@ -36,7 +36,6 @@ public:
 		this->texture_2->initParams();
 
 		addComponent<DrawableComponent>();
-		addComponent<MovementComponent>();
 	}
 
 	// Call this before drawing, before the render loop
@@ -55,8 +54,6 @@ public:
 private:
 	std::string obj_file_path;
 	std::string tex_file_path;
-
-    glm::vec3 scale = glm::vec3(1.f);
 };
 
 

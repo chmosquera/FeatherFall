@@ -69,6 +69,13 @@ public:
     void setProgName(std::string pn) {prog_name = pn;}
 	uuid_t getUUID() { return(uuid); }
 
+	// Transform
+	glm::vec3 position = glm::vec3(0);
+	glm::vec3 rotation = glm::vec3(0);
+	glm::vec3 scale = glm::vec3(1);
+	
+
+
     virtual void update(double frametime) {}
 	//virtual void init(Program* prog) {}
 	virtual void draw(Program* prog) {}

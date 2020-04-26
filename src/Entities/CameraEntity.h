@@ -25,7 +25,7 @@ public:
 	CameraEntity(float fov, const glm::vec3& loc, float near_plane, float far_plane) : Entity(), fov(fov), near_plane(near_plane), far_plane(far_plane) {
 		init();
 	}
-
+	
 	// Setup camera properties
 	void init() {
 		movement = addComponent<MovementComponent>();
@@ -51,24 +51,19 @@ public:
 
 	virtual glm::mat4 getView() const;
 	virtual glm::vec3 getViewDir() const;
+	glm::vec3 getTargetPos(glm::vec3 pos) { return target_pos; }
+
 	
 	void setProjectionMatrix(Program * prog);
 	void setViewMatrix(Program * prog);
-
 	virtual void setNearPlane(float near_plane) { this->near_plane = near_plane; }
 	virtual void setFarPlane(float far_plane) { this->far_plane = far_plane; }
 	void setAspect(float aspect) { this->aspect = aspect;  }
-
-	void smoothTranslate(glm::vec3 v);
+	void setScreensize(glm::ivec2 s) { screen_size = s; }
+	glm::vec3 setTargetObject(Entity * entity);
 
 	glm::mat4 getViewMatrix();	
 	void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
-//	void ProcessMouseScroll(float yoffset);
-
-	void setScreensize(glm::ivec2 s) { screensize = s; }
-
-	// Model matrix is needed to move this entity
-	glm::mat4 M = glm::mat4(1);
 
 	glm::quat orientation = glm::quat(0, 0, 0, -1);	
 	float pitch = 0;
@@ -80,15 +75,29 @@ public:
 
 	glm::vec2 old_cursor_pos = glm::vec2(0);
 
+	// TODO
+	void lockOrientation() { 
+		lock_orientation = true;
+	}
+	void unlockOrientation() { lock_orientation = false; }
+
+
 private:
 	glm::vec3 rotation = glm::vec3(0);
 	float fov;
 	float near_plane;
 	float far_plane;
 	float aspect;
-	glm::ivec2 screensize;
+	glm::ivec2 screen_size;
+
+	Entity target_object;
+	glm::vec3 target_pos = glm::vec3(0);
 
 	void updateCameraVectors();
+
+	// TODO 
+
+	bool lock_orientation = true;
 };
 
 #endif

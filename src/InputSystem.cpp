@@ -5,7 +5,7 @@ std::map<InputSystem::input_t, std::function<void()>> InputSystem::inputCallback
 void InputSystem::MapKeybind() {
 	inputCallback[UP_ARROW_PRESS] = std::bind([]() {
 		Application::getInstance().camera->movement->setVelocity(glm::vec3(0, 0, -1));
-		
+		std::cout << "up" << std::endl;
 	});
 	inputCallback[RIGHT_ARROW_PRESS] = std::bind([]() {
 		Application::getInstance().camera->movement->setVelocity(glm::vec3(1, 0, 0));
@@ -50,3 +50,9 @@ void InputSystem::MapKeybind() {
 		
 		Application::getInstance().camera->ProcessMouseMovement(xpos, ypos);
 	}
+
+	void InputSystem::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+	{
+
+	}
+

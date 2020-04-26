@@ -17,7 +17,6 @@ void AppleEntity::draw(Program* prog)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->getTextureID());
 
-//	glm::mat4 M = drawable->getModelMatrix();
 	glm::mat4 M = glm::translate(glm::mat4(1), movement.getPosition()); // * rotation *
 	M = M * glm::scale(glm::mat4(1), scale);
     getComponent<DrawableComponent>().setModelMatrix(M);

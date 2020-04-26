@@ -20,7 +20,9 @@
 class AppleEntity : public Entity {
     
 public:
-    AppleEntity() : Entity() {}
+    AppleEntity() : Entity() {
+	
+	}
     AppleEntity(std::string obj_file_path, std::string tex_file_path) : Entity() {
         this->shape = std::make_shared<Shape>();
         this->shape->loadMesh(obj_file_path);

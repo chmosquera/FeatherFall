@@ -13,7 +13,6 @@
 #include "InputSystem.h"
 
 static void error_callback(int error, const char* description) { std::cerr << "glfw error: " << description << std::endl; };
-static void mouse_callback(GLFWwindow* window, int button, int action, int mods) { };
 static void resize_callback(GLFWwindow* window, int in_width, int in_height) { };
 
 void Application::init(int argc, char** argv)
@@ -35,47 +34,58 @@ void Application::run()
     render_system.init(_window);
 //    std::vector<Entity*> new_entities(entities);
 //    new_entities.push_back(&camera);
-    double frame = 0;
-    std::vector<Entity*> new_entities(entities);
-    new_entities.emplace_back(camera);
-    
-    int total_apples = 0;
-    int total_collected = 0;
+    //double frame = 0;
+    //std::vector<Entity*> new_entities(entities);
+    //new_entities.emplace_back(camera);
+    //
+    //int total_apples = 0;
+    //int total_collected = 0;
 	// Loop until the user closes the window.
 	while (!glfwWindowShouldClose(_window))
 	{
         double frametime = time.getElapsedTime();
-        if(frame>=2.0){
+
+		// TODO put this in another class
+		int state = glfwGetMouseButton(_window, GLFW_MOUSE_BUTTON_LEFT);
+		if (state == GLFW_PRESS) {
+			camera->unlockOrientation();
+			std::cout << "locked" << std::endl;
+		}
+		else {
+			camera->lockOrientation();
+			std::cout << "unlocked" << std::endl;
+		}
+
+        //if(frame>=2.0){
 
             
-        AppleEntity* apple = new AppleEntity(resourceDir + "apple.obj", resourceDir + "Apple_BaseColor.png");
-        apple->setProgName("apple_prog");
-        apple->setScale(glm::vec3(0.25f));
-        MovementComponent* mc_a = &apple->getComponent<MovementComponent>();
-        mc_a->setPosition(glm::vec3(rand()%8-4, -0.5,rand()%8-4));
-        int v = rand()%2 - 1;
-        if(v==0)
-            v=-1;
-        mc_a->setVelocity(glm::vec3(rand()%2-1,0,v));
-        apple->addComponent<BoundingBoxComponent>();
-        apple->getComponent<BoundingBoxComponent>().init(*apple->shape, mc_a->getPosition(), apple->getScale());
-        new_entities.emplace_back(apple);
+        //AppleEntity* apple = new AppleEntity(resourceDir + "apple.obj", resourceDir + "Apple_BaseColor.png");
+        //apple->setProgName("apple_prog");
+        //apple->setScale(glm::vec3(0.25f));
+        //MovementComponent* mc_a = &apple->getComponent<MovementComponent>();
+        //mc_a->setPosition(glm::vec3(rand()%8-4, -0.5,rand()%8-4));
+        //int v = rand()%2 - 1;
+        //if(v==0)
+        //    v=-1;
+        //mc_a->setVelocity(glm::vec3(rand()%2-1,0,v));
+        //apple->addComponent<BoundingBoxComponent>();
+        //apple->getComponent<BoundingBoxComponent>().init(*apple->shape, mc_a->getPosition(), apple->getScale());
+        //new_entities.emplace_back(apple);
 
-            frame = 0.0;
-            total_apples++;
-            
-            std::cout<<"APPLES COLLECTED: "<<total_collected<<std::endl;
-            std::cout<<"APPLES LEFT: "<<total_apples-total_collected<<std::endl;
+        //    frame = 0.0;
+        //    total_apples++;
+        //    
+        //    std::cout<<"APPLES COLLECTED: "<<total_collected<<std::endl;
+        //    std::cout<<"APPLES LEFT: "<<total_apples-total_collected<<std::endl;
 
-            
-        }
-        frame+=frametime;
-
-        for(Entity* e : new_entities)
+        //    
+        //}
+        //frame+=frametime;
+        for(Entity* e : entities)
             e->update(frametime);
-        collision_system.process(new_entities);
-        total_collected = collision_system.getNumberCollected();
-		render_system.process(new_entities, camera);
+        collision_system.process(entities);
+        //total_collected = collision_system.getNumberCollected();
+		render_system.process(entities, camera);
 
 		// Swap front and back buffers.
 		glfwSwapBuffers(_window);
@@ -142,7 +152,7 @@ void Application::initGLFW()
 	glfwSwapInterval(1);
 
 	glfwSetKeyCallback(_window, inputSystem->keyCallback);
-	glfwSetMouseButtonCallback(_window, mouse_callback);
+	glfwSetMouseButtonCallback(_window, inputSystem->mouseButtonCallback);
 	glfwSetCursorPosCallback(_window, inputSystem->cursorPositionCallBack);
 	glfwSetFramebufferSizeCallback(_window, resize_callback);
 
@@ -165,28 +175,36 @@ void Application::initScene()
 	bb->maxZ = 1.0f;
 	
 
-    MovementComponent* mc_c = &camera->getComponent<MovementComponent>();
-	mc_c->setPosition(glm::vec3(0, 1, -1));
-//	mc_c->setVelocity(glm::vec3(0, 0, -1));
-
+	camera->position = glm::vec3(0, 5, 0);
+	entities.emplace_back(camera);
+	camera->setProgName("platform_prog");
 
     glm::ivec2 screensize = getCurrScreenSize();
 	camera->setAspect(screensize.x / screensize.y);
 	camera->setScreensize(screensize);
+	entities.emplace_back(camera);
 
 	// -- platform --
 	PlatformEntity* platform = new PlatformEntity(resourceDir + "platform.obj", resourceDir + "Zelt_Baumstamm_Boden_diffuse.png");
     platform->setProgName("platform_prog");
     MovementComponent* mc_p = &platform->getComponent<MovementComponent>();
-    mc_p->setPosition(glm::vec3(0.0f, -1, -5));
-	platform->setScale(glm::vec3(10, 1, 10));
+	platform->position = glm::vec3(0.0f, -1, -5);
+	platform->scale = glm::vec3(10, 1, 10);
     platform->addComponent<BoundingBoxComponent>();
-    platform->getComponent<BoundingBoxComponent>().init(*platform->shape, mc_p->getPosition(), platform->getScale());
-    entities.emplace_back(platform);
+    platform->getComponent<BoundingBoxComponent>().init(*platform->shape, platform->position, platform->scale);
 	
+
+	TreeEntity* tree = new TreeEntity(resourceDir + "tree_base.obj", resourceDir + "tree_top.obj", resourceDir + "Zelt_Baumstamm_Boden_diffuse.png", resourceDir + "leaf_tex.png");
+	tree->setProgName("tree_prog");
+	tree->position = glm::vec3(0, 0, -5);
+	tree->addComponent<BoundingBoxComponent>();
+	tree->getComponent<BoundingBoxComponent>().init(*tree->shape_1, tree->position, tree->scale);
+	entities.emplace_back(tree);
+
+	camera->setTargetObject(tree);
     
 	 // --- tree -----
-     for(int i=-2; i<3; i++)
+     /*for(int i=-2; i<3; i++)
      {
          TreeEntity* tree = new TreeEntity(resourceDir + "tree_base.obj", resourceDir + "tree_top.obj", resourceDir + "Zelt_Baumstamm_Boden_diffuse.png", resourceDir + "leaf_tex.png");
          tree->setProgName("tree_prog");
@@ -266,7 +284,7 @@ void Application::initScene()
             tree->addComponent<BoundingBoxComponent>();
             tree->getComponent<BoundingBoxComponent>().init(*tree->shape_1, mc_t->getPosition(), tree->getScale());
             entities.emplace_back(tree);
-        }
+        }*/
 	
     for(Entity* e : entities){
         Program * prog = ShaderLibrary::getInstance().getPtr(e->getProgName());

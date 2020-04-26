@@ -11,12 +11,13 @@
 
 void PlatformEntity::draw(Program* apple_prog)
 {
+	DrawableComponent * drawable = &getComponent<DrawableComponent>();
+	MovementComponent * movement = &getComponent<MovementComponent>();
+
 	apple_prog->bind();
 	
-	glm::mat4 M = drawable->getModelMatrix();
-	M = glm::translate(glm::mat4(1), movement->getPosition()); // * rotation * 
-	M *= glm::scale(glm::mat4(1), scale);
-	drawable->setModelMatrix(M);
+	// Get updated position
+	if (movement != nullptr) position = movement->getPosition();
 
     texture->uploadToGPU(apple_prog->getPID(), 0);
     glActiveTexture(GL_TEXTURE0);
