@@ -8,14 +8,22 @@
 #include "CollisionSystem.hpp"
 #include "Components/BoundingBoxComponent.hpp"
 #include "Components/MovementComponent.hpp"
+#include "Components/SphereColliderComponent.hpp"
+#include "Components/PlaneColliderComponent.hpp"
+#include "Components/ColliderComponent.h"
 #include "Entities/AppleEntity.h"
 #include "Entities/TreeEntity.h"
 
 
 void CollisionSystem::process(std::vector<Entity*> entities)
 {
-    
-
+	
+	for (std::size_t i = 0; i < entities.size(); ++i)
+	{
+		Entity* entity_i = entities[i];
+		ColliderComponent* collider_i = &entity_i->getComponent<SphereColliderComponent>();
+	}
+	/*
     BoundingBoxComponent bound_box_i, bound_box_j;
     for(std::size_t i=0; i<entities.size(); ++i)
     {
@@ -88,7 +96,8 @@ void CollisionSystem::process(std::vector<Entity*> entities)
                 }
             }
         }
-    }
+		*/
+    
 }
 
 

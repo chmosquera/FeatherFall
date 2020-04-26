@@ -7,7 +7,7 @@
 
 #include "BoundingBoxComponent.hpp"
 #include <sstream>
-#include <tgmath.h>
+#include <ctgmath>
 #include <iostream>
 
 void BoundingBoxComponent::init(Shape shape, glm::vec3 start_pos, glm::vec3 scale)
@@ -83,10 +83,16 @@ void BoundingBoxComponent::calculateBoxCoordinates(glm::vec3 position)
 
 }
 
-bool BoundingBoxComponent::isIntersecting(BoundingBoxComponent obj)
+bool BoundingBoxComponent::isIntersecting(ColliderComponent o)
 {
-    return minX <= obj.maxX && maxX >= obj.minX &&
-           minY <= obj.maxY && maxY >= obj.minY &&
-           minZ <= obj.maxZ && maxZ >= obj.minZ;
+	
+	BoundingBoxComponent* obj = dynamic_cast<BoundingBoxComponent*>(&o);
+	if (obj) {
+		return minX <= obj->maxX && maxX >= obj->minX &&
+			minY <= obj->maxY && maxY >= obj->minY &&
+			minZ <= obj->maxZ && maxZ >= obj->minZ;
+	}
+	return false;
+	
 }
 

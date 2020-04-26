@@ -11,6 +11,8 @@
 #include <sstream>
 #include <array>
 #include "../Components/BoundingBoxComponent.hpp"
+#include "../Components/ColliderComponent.h"
+#include "../Components/SphereColliderComponent.hpp"
 
 
 typedef uintmax_t uuid_t;

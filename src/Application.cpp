@@ -5,9 +5,13 @@
 #include "Entities/AppleEntity.h"
 #include "Entities/TreeEntity.h"
 #include "Entities/PlatformEntity.h"
+#include "Components/ColliderComponent.h"
+#include "Components/SphereColliderComponent.hpp"
+#include "Components/PlaneColliderComponent.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include "Components/MovementComponent.hpp"
 #include "Components/BoundingBoxComponent.hpp"
+#include "Components/ColliderComponent.h"
 #include "CollisionSystem.hpp"
 #include "util/Time.h"
 #include "InputSystem.h"
@@ -44,10 +48,11 @@ void Application::run()
 	// Loop until the user closes the window.
 	while (!glfwWindowShouldClose(_window))
 	{
-        double frametime = time.getElapsedTime();
-        if(frame>=2.0){
 
-            
+        double frametime = time.getElapsedTime();
+		/*
+		if(frame>=2.0){
+
         AppleEntity* apple = new AppleEntity(resourceDir + "apple.obj", resourceDir + "Apple_BaseColor.png");
         apple->setProgName("apple_prog");
         apple->setScale(glm::vec3(0.25f));
@@ -69,6 +74,7 @@ void Application::run()
 
             
         }
+		*/
         frame+=frametime;
 
         for(Entity* e : new_entities)
@@ -177,14 +183,26 @@ void Application::initScene()
 	// -- platform --
 	PlatformEntity* platform = new PlatformEntity(resourceDir + "platform.obj", resourceDir + "Zelt_Baumstamm_Boden_diffuse.png");
     platform->setProgName("platform_prog");
-    MovementComponent* mc_p = &platform->getComponent<MovementComponent>();
-    mc_p->setPosition(glm::vec3(0.0f, -1, -5));
 	platform->setScale(glm::vec3(10, 1, 10));
-    platform->addComponent<BoundingBoxComponent>();
-    platform->getComponent<BoundingBoxComponent>().init(*platform->shape, mc_p->getPosition(), platform->getScale());
+	PlaneColliderComponent* plane = &platform->getComponent<PlaneColliderComponent>();
+	plane->init(glm::vec3(0.0, -1.0, 1.0), glm::vec3(-1.0, -1.0, 0.0), glm::vec3(1.0, -1.0, 0.0));
     entities.emplace_back(platform);
 	
-    
+	// --- sphere apple ---
+	AppleEntity* apple = new AppleEntity(resourceDir + "apple.obj", resourceDir + "Apple_BaseColor.png");
+	apple->setProgName("apple_prog");
+	apple->setScale(glm::vec3(0.25f));
+	MovementComponent* mc_a = &apple->getComponent<MovementComponent>();
+	mc_a->setPosition(glm::vec3(0.0,10.0,-3.0));
+	mc_a->setVelocity(glm::vec3(0.0,0.0,0.0));
+	apple->addComponent<SphereColliderComponent>();
+	apple->getComponent<SphereColliderComponent>().init(*apple->shape, mc_a->getPosition(), 2.0);
+	entities.emplace_back(apple);
+
+
+
+
+    /*
 	 // --- tree -----
      for(int i=-2; i<3; i++)
      {
@@ -267,7 +285,7 @@ void Application::initScene()
             tree->getComponent<BoundingBoxComponent>().init(*tree->shape_1, mc_t->getPosition(), tree->getScale());
             entities.emplace_back(tree);
         }
-	
+	*/
     for(Entity* e : entities){
         Program * prog = ShaderLibrary::getInstance().getPtr(e->getProgName());
         prog->addUniform("P");

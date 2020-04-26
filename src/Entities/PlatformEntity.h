@@ -13,6 +13,7 @@
 #include "../util/Shape.h"
 #include "../Components/DrawableComponent.h"
 #include "../Components/MovementComponent.hpp"
+#include "../Components/PlaneColliderComponent.hpp"
 #include "../OOOGL/Texture.h"
 #include "../SystemEnvironment.h"
 #include "Entity.h"
@@ -32,11 +33,14 @@ public:
 
 		drawable = addComponent<DrawableComponent>();
 		movement = addComponent<MovementComponent>();
+		plane_collider = addComponent<PlaneColliderComponent>();
 	}
 
 	// Components
 	DrawableComponent * drawable;
 	MovementComponent * movement;
+	PlaneColliderComponent * plane_collider;
+	
 		
 	void draw(Program* prog);
 

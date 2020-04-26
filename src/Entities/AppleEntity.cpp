@@ -30,14 +30,17 @@ void AppleEntity::draw(Program* prog)
     prog->unbind();
 
 }
-
+const float gravity = -2.0; //increase in velocity per second
 static float x = 0.0f;
 void AppleEntity::update(double frametime){
-
     MovementComponent* mc = &getComponent<MovementComponent>();
-
+	if (mc->getPosition().y < 0.5) {
+		return;
+	}
+	mc->incrementVelocity(glm::vec3(0.0, gravity * frametime, 0.0));
     mc->update(frametime);
 
-    BoundingBoxComponent* bc = &getComponent<BoundingBoxComponent>();
-    bc->calculateBoxCoordinates(mc->getVelocity(), frametime);
+    SphereColliderComponent* sc = &getComponent<SphereColliderComponent>();
+	sc->center = mc->getPosition();
+    //bc->calculateBoxCoordinates(sc->getVelocity(), frametime);
 }

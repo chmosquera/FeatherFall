@@ -12,7 +12,6 @@
 void MovementComponent::update(double frametime){
 
 //	std::cout << "velocity : " << velocity.x << ", " << velocity.y << ", " << velocity.z << std::endl;
-
     this->x += frametime * this->velocity.x;
     this->y += frametime * this->velocity.y;
     this->z += frametime * this->velocity.z;
